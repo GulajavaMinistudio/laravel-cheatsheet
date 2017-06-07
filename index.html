@@ -424,6 +424,9 @@ Model::findOrFail(1);
 Model::findOrFail(array('first', 'last'));
 Model::where('foo', '=', 'bar')->get();
 Model::where('foo', '=', 'bar')->first();
+// Find using relations
+Model::whereHas('relation')->get();
+Model::with('relation')->where('relation.foo', 'bar')->get();
 // dynamic
 Model::whereFoo('bar')->first();
 // Throw an exception if the lookup fails
@@ -442,8 +445,8 @@ Model::with('relation')->get();
 Model::all()->take(10);
 Model::all()->skip(10);
 // Default Eloquent sort is ascendant
-Model::all()->orderBy('column');
-Model::all()->orderBy('column','desc');
+Model::orderBy('column')->get();
+Model::orderBy('column','desc')->get();
                 </pre>
 
                 <h6>Soft Delete</h6>
@@ -577,8 +580,8 @@ $table->date('created_at');
 $table->dateTime('created_at');
 $table->time('sunrise');
 $table->timestamp('added_on');
-$table->timestamps();
 // Adds created_at and updated_at columns
+$table->timestamps();
 $table->nullableTimestamps();
 
 // Others
@@ -586,13 +589,13 @@ $table->json('options');
 $table->jsonb('options');
 $table->binary('data');
 $table->boolean('confirmed');
-$table->softDeletes();
 // Adds deleted_at column for soft deletes
+$table->softDeletes();
 $table->enum('choices', array('foo', 'bar'));
-$table->rememberToken();
 // Adds remember_token as VARCHAR(100) NULL
-$table->morphs('parent');
+$table->rememberToken();
 // Adds INTEGER parent_id and STRING parent_type
+$table->morphs('parent');
 ->nullable()
 ->default($value)
 ->unsigned()
@@ -997,15 +1000,15 @@ View::creator('viewname', function($view){});
 @include('view.name', array('key' => 'value'));
 @lang('messages.name')
 @choice('messages.name', 1);
-@if
+@if ( $foo == $bar )
 @else
 @elseif
 @endif
 @unless
 @endunless
-@for
+@for ( $i = 0 ; $i < 100 ; $i++ )
 @endfor
-@foreach
+@foreach ( $vars as $var )
 @endforeach
 @while
 @endwhile
@@ -1020,6 +1023,8 @@ View::creator('viewname', function($view){});
 {{-- Blade Comment --}}
 // Echoing Data After Checking For Existence
 {{{ $name or 'Default' }}}
+// Echo HTML content
+{!! $html or '<strong>Foo</strong>' !!}
 // Displaying Raw Text With Curly Braces
 @{{ This will not be processed by Blade }}
                 </pre>
